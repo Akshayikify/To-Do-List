@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
 from .models import Todo
 from django.contrib.auth import authenticate,login,logout
+from django.contrib.auth.decorators import login_required
 def signup(request):
     if request.method=='POST':
         username=request.POST.get('username')
@@ -24,6 +25,8 @@ def login_user(request):
         else:
             return redirect('/login')
     return render(request,'login.html')
+
+@login_required(login_url='/login')
 def dashboard(request):
     if request.method=='POST':
         title=request.POST.get('title')
@@ -34,6 +37,8 @@ def dashboard(request):
         return redirect('/dashboard',{'res':res})
     res=Todo.objects.filter(user=request.user).order_by('-date')
     return render(request,'dashboard.html',{'res':res})
+
+@login_required(login_url='/login')
 def edit_todo(request,task_id):
     if request.method=='POST':
         title=request.POST.get('title')
@@ -45,3 +50,12 @@ def edit_todo(request,task_id):
     obj=Todo.objects.get(task_id=task_id)
     res=Todo.objects.filter(user=request.user).order_by('-date')
     return render(request,'dashboard.html',{'res':res})
+
+@login_required(login_url='/login')
+def delete_todo(request,task_id):
+    obj=Todo.objects.get(task_id=task_id)
+    obj.delete()
+    return redirect('/dashboard')
+def logout_user(request):
+    logout(request)
+    return redirect('/login')

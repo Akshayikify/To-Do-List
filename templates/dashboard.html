@@ -18,10 +18,11 @@
                 {% csrf_token %}
                 <div class="heading">
                     <h2>Todo List Dashboard</h2>
+                    <div class="logout"><a href="{% url 'logout' %}"><i class="fa-solid fa-arrow-right-from-bracket"></i></a></div>
                     <div class="user_name">Hello 👋 {{user}}</div>
                 </div>
                 <div class="input-fields">
-                    <label for="task">Task:<input type="text" id="task" placeholder="Add today's task" name="title" value={{obj.title}} required></label>
+                    <label for="task">Task:<input type="text" id="task" placeholder="Add today's task" name="title" required value={{obj.title}}></label>
                 </div>
                 <div class="submit">
                     <input type="submit" class="submit" value="ADD TASK">
@@ -31,7 +32,7 @@
             <div class="task">
                 {{ task.title }}
                 <a href="/edit/{{task.task_id}}"><i class="fa-solid fa-pen-to-square"></i></a>
-                <a href=""><i class="fa-solid fa-trash"></i></a>
+                <a href="/delete/{{task.task_id}}"><i class="fa-solid fa-trash"></i></a>
             </div>
             {% endfor%}
         </div>
